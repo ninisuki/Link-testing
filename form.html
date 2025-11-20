@@ -1,44 +1,618 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <title>HTML 表单示例</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        /* 基础样式和重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        /* 表单容器 */
+        form {
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        
+        /* 表单字段组 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* 标签样式 */
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #333;
+        }
+        
+        /* 输入框样式 */
+        input[type="text"],
+        input[type="email"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #ff7e00;
+        }
+        
+        /* 电话号码区域 */
+        .phone-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: stretch;
+            height: auto;
+        }
+        
+        /* 国家代码下拉框 */
+        .country-code-container {
+            margin-bottom: 10px;
+        }
+        
+        /* 自定义下拉框样式 */
+        .custom-select {
+            position: relative;
+            min-width: 120px;
+        }
+        
+        .select-selected {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        
+        .select-selected:hover,
+        .select-selected.select-arrow-active {
+            border-color: #ff7f50;
+        }
+        
+        .flag-icon {
+            width: 24px;
+            height: 16px;
+            margin-right: 8px;
+            border-radius: 2px;
+            object-fit: contain;
+            vertical-align: middle;
+        }
+        
+        .select-arrow {
+            margin-left: auto;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .select-arrow-active .select-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .select-items {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background-color: #fff;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .select-items.show {
+            display: block;
+        }
+        
+        .select-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .select-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .select-item.selected {
+            background-color: #ff7f50;
+            color: white;
+        }
+        
+        .phone-input {
+            flex: 1;
+        }
+        
+        /* 单选按钮样式 */
+        .gender-options {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .gender-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        /* 提交按钮样式 */
+        .submit-button {
+            width: 100%;
+            background-color: #ff7e00;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .submit-button:hover {
+            background-color: #e66f00;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            form {
+                padding: 1.5rem;
+            }
+            
+            .phone-container {
+                flex-direction: column;
+            }
+            
+            .country-code {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-   <form action="/submit" method="post">
-       <!-- 文本输入框 -->
-       <label for="username">用户名:</label>
-       <input type="text" id="username" name="username" required>
-       <br><br>
-       <!-- 密码输入框 -->
-       <label for="password">密码:</label>
-       <input type="password" id="password" name="password" required>
-       <br><br>
-       <!-- 单选按钮 -->
-       <label>性别:</label>
-       <input type="radio" id="male" name="gender" value="male" checked>
-       <label for="male">男</label>
-       <input type="radio" id="female" name="gender" value="female">
-       <label for="female">女</label>
-       <br><br>
-       <!-- 复选框 -->
-       <label>兴趣爱好:</label>
-       <input type="checkbox" id="coding" name="hobby" value="coding">
-       <label for="coding">编程</label>
-       <input type="checkbox" id="music" name="hobby" value="music">
-       <label for="music">音乐</label>
-       <br><br>
-       <!-- 下拉列表 -->
-       <label for="country">国家:</label>
-       <select id="country" name="country">
-           <option value="">请选择</option>
-           <option value="cn">中国</option>
-           <option value="us">美国</option>
-           <option value="uk">英国</option>
-       </select>
-       <br><br>
-       <!-- 提交按钮 -->
-       <input type="submit" value="提交">
-   </form>
-</body>
+    <!-- 表单内容将在这里添加 -->
+    <form id="registrationForm">
+        <!-- 姓名字段 -->
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your full name" required>
+        </div>
+        
+        <!-- WhatsApp号码字段 -->
+        <div class="form-group">
+            <label for="phone">Registered WhatsApp Number</label>
+            <div class="phone-container">
+                <div class="country-code-container">
+                    <div class="custom-select" id="customCountrySelect">
+                        <div class="select-selected">
+                            <img src="svg/us.svg" alt="US Flag" class="flag-icon">
+                            <span>+1</span>
+                            <div class="select-arrow">▼</div>
+                        </div>
+                        <div class="select-items">
+                            <div class="select-item" data-value="+1">
+                                <img src="svg/us.svg" alt="US Flag" class="flag-icon">
+                                <span>+1</span>
+                            </div>
+                            <div class="select-item" data-value="+44">
+                                <img src="svg/gb.svg" alt="UK Flag" class="flag-icon">
+                                <span>+44</span>
+                            </div>
+                            <div class="select-item" data-value="+49">
+                                <img src="svg/de.svg" alt="Germany Flag" class="flag-icon">
+                                <span>+49</span>
+                            </div>
+                            <div class="select-item" data-value="+61">
+                                <img src="svg/au.svg" alt="Australia Flag" class="flag-icon">
+                                <span>+61</span>
+                            </div>
+                            <div class="select-item" data-value="+86">
+                                <img src="svg/cn.svg" alt="China Flag" class="flag-icon">
+                                <span>+86</span>
+                            </div>
+                            <div class="select-item" data-value="+91">
+                                <img src="svg/in.svg" alt="India Flag" class="flag-icon">
+                                <span>+91</span>
+                            </div>
+                            <div class="select-item" data-value="+33">
+                                <img src="svg/fr.svg" alt="France Flag" class="flag-icon">
+                                <span>+33</span>
+                            </div>
+                            <div class="select-item" data-value="+81">
+                                <img src="svg/jp.svg" alt="Japan Flag" class="flag-icon">
+                                <span>+81</span>
+                            </div>
+                            <div class="select-item" data-value="+55">
+                                <img src="svg/br.svg" alt="Brazil Flag" class="flag-icon">
+                                <span>+55</span>
+                            </div>
+                            <div class="select-item" data-value="+34">
+                                <img src="svg/es.svg" alt="Spain Flag" class="flag-icon">
+                                <span>+34</span>
+                            </div>
+                            <div class="select-item" data-value="+7">
+                                <img src="svg/ru.svg" alt="Russia Flag" class="flag-icon">
+                                <span>+7</span>
+                            </div>
+                            <div class="select-item" data-value="+82">
+                                <img src="svg/kr.svg" alt="South Korea Flag" class="flag-icon">
+                                <span>+82</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="countryCode" value="+1">
+                </div>
+                <input type="text" id="phone" class="phone-input" placeholder="Enter your phone number" required>
+            </div>
+        </div>
+        
+        <!-- 性别字段 -->
+        <div class="form-group">
+            <label>Gender</label>
+            <div class="gender-options">
+                <div class="gender-option">
+                    <input type="radio" id="male" name="gender" value="male" required>
+                    <label for="male">Male</label>
+                </div>
+                <div class="gender-option">
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Female</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 年龄字段 -->
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" placeholder="Enter your age" min="1" max="120" required>
+        </div>
+        
+        <!-- 电子邮件字段 -->
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email address" required>
+        </div>
+        
+        <!-- 提交按钮 -->
+        <button type="submit" class="submit-button">Submit</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registrationForm');
+            
+            // 错误消息元素
+            function showError(input, message) {
+                const formGroup = input.closest('.form-group');
+                let errorElement = formGroup.querySelector('.error-message');
+                
+                if (!errorElement) {
+                    errorElement = document.createElement('div');
+                    errorElement.className = 'error-message';
+                    errorElement.style.color = 'red';
+                    errorElement.style.fontSize = '0.8rem';
+                    errorElement.style.marginTop = '0.25rem';
+                    formGroup.appendChild(errorElement);
+                }
+                
+                errorElement.textContent = message;
+                input.classList.add('error');
+            }
+            
+            // 清除错误消息
+            function clearError(input) {
+                const formGroup = input.closest('.form-group');
+                const errorElement = formGroup.querySelector('.error-message');
+                
+                if (errorElement) {
+                    formGroup.removeChild(errorElement);
+                }
+                
+                input.classList.remove('error');
+            }
+            
+            // 验证姓名
+            function validateName(name) {
+                if (!name.trim()) {
+                    return 'Name is required';
+                }
+                if (name.trim().length < 2) {
+                    return 'Name must be at least 2 characters';
+                }
+                return null;
+            }
+            
+            // 验证电话号码
+            function validatePhone(phone) {
+                if (!phone.trim()) {
+                    return 'Phone number is required';
+                }
+                // 简单的电话号码验证，只允许数字
+                const phoneRegex = /^[0-9]+$/;
+                if (!phoneRegex.test(phone.trim())) {
+                    return 'Phone number must contain only digits';
+                }
+                if (phone.trim().length < 8 || phone.trim().length > 15) {
+                    return 'Phone number must be between 8 and 15 digits';
+                }
+                return null;
+            }
+            
+            // 验证年龄
+            function validateAge(age) {
+                if (!age) {
+                    return 'Age is required';
+                }
+                
+                const ageNum = parseInt(age);
+                if (isNaN(ageNum)) {
+                    return 'Age must be a number';
+                }
+                
+                if (ageNum < 1 || ageNum > 120) {
+                    return 'Age must be between 1 and 120';
+                }
+                
+                return null;
+            }
+            
+            // 验证电子邮件
+            function validateEmail(email) {
+                if (!email.trim()) {
+                    return 'Email is required';
+                }
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email.trim())) {
+                    return 'Please enter a valid email address';
+                }
+                
+                return null;
+            }
+            
+            // 为输入框添加实时验证
+            const nameInput = document.getElementById('name');
+            const phoneInput = document.getElementById('phone');
+            const ageInput = document.getElementById('age');
+            const emailInput = document.getElementById('email');
+            
+            nameInput.addEventListener('blur', function() {
+                const error = validateName(nameInput.value);
+                if (error) {
+                    showError(nameInput, error);
+                } else {
+                    clearError(nameInput);
+                }
+            });
+            
+            phoneInput.addEventListener('blur', function() {
+                const error = validatePhone(phoneInput.value);
+                if (error) {
+                    showError(phoneInput, error);
+                } else {
+                    clearError(phoneInput);
+                }
+            });
+            
+            ageInput.addEventListener('blur', function() {
+                const error = validateAge(ageInput.value);
+                if (error) {
+                    showError(ageInput, error);
+                } else {
+                    clearError(ageInput);
+                }
+            });
+            
+            emailInput.addEventListener('blur', function() {
+                const error = validateEmail(emailInput.value);
+                if (error) {
+                    showError(emailInput, error);
+                } else {
+                    clearError(emailInput);
+                }
+            });
+        });
+        
+        // 自定义下拉框功能
+        const customSelect = document.getElementById('customCountrySelect');
+        const selectedElement = customSelect.querySelector('.select-selected');
+        const itemsContainer = customSelect.querySelector('.select-items');
+        const items = customSelect.querySelectorAll('.select-item');
+        const hiddenInput = document.getElementById('countryCode');
+        
+        // 点击下拉框切换显示状态
+        selectedElement.addEventListener('click', function() {
+            itemsContainer.classList.toggle('show');
+            selectedElement.classList.toggle('select-arrow-active');
+        });
+        
+        // 点击选项更新选中值
+        items.forEach(item => {
+            item.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                const flagSrc = this.querySelector('.flag-icon').src;
+                const text = this.querySelector('span').textContent;
+                
+                // 更新选中显示
+                selectedElement.querySelector('.flag-icon').src = flagSrc;
+                selectedElement.querySelector('span').textContent = text;
+                
+                // 更新隐藏输入值
+                hiddenInput.value = value;
+                
+                // 关闭下拉框
+                itemsContainer.classList.remove('show');
+                selectedElement.classList.remove('select-arrow-active');
+            });
+        });
+        
+        // 点击其他地方关闭下拉框
+        document.addEventListener('click', function(event) {
+            if (!customSelect.contains(event.target)) {
+                itemsContainer.classList.remove('show');
+                selectedElement.classList.remove('select-arrow-active');
+            }
+        });
+        
+        // 表单提交处理
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            let isValid = true;
+            
+            // 验证所有字段
+            const nameError = validateName(nameInput.value);
+            if (nameError) {
+                showError(nameInput, nameError);
+                isValid = false;
+            } else {
+                clearError(nameInput);
+            }
+            
+            const phoneError = validatePhone(phoneInput.value);
+            if (phoneError) {
+                showError(phoneInput, phoneError);
+                isValid = false;
+            } else {
+                clearError(phoneInput);
+            }
+            
+            const ageError = validateAge(ageInput.value);
+            if (ageError) {
+                showError(ageInput, ageError);
+                isValid = false;
+            } else {
+                clearError(ageInput);
+            }
+            
+            const emailError = validateEmail(emailInput.value);
+            if (emailError) {
+                showError(emailInput, emailError);
+                isValid = false;
+            } else {
+                clearError(emailInput);
+            }
+            
+            // 验证性别是否选择
+            const genderSelected = document.querySelector('input[name="gender"]:checked');
+            if (!genderSelected) {
+                const genderFormGroup = document.querySelector('.gender-options').closest('.form-group');
+                showError(document.querySelector('input[name="gender"]'), 'Please select a gender');
+                isValid = false;
+            } else {
+                clearError(genderSelected);
+            }
+            
+            // 如果所有验证都通过，模拟提交
+            if (isValid) {
+                // 收集表单数据
+                const formData = {
+                    name: nameInput.value.trim(),
+                    phone: `${document.getElementById('countryCode').value} ${phoneInput.value.trim()}`,
+                    gender: document.querySelector('input[name="gender"]:checked').value,
+                    age: ageInput.value,
+                    email: emailInput.value.trim()
+                };
+                
+                console.log('Form data to be submitted:', formData);
+                
+                // 后端接口预留位置 - 后续开发时替换为实际API地址
+                // 以下是一个示例API调用
+                submitFormDataToBackend(formData);
+            }
+        });
+        // 后端API调用函数 - 预留接口位置
+        function submitFormDataToBackend(formData) {
+            // 实际应用中，这里应该是与后端进行通信的代码
+            // 示例API调用 - 请替换为真实的后端接口URL
+            const API_URL = 'https://api.example.com/register';
+            
+            // 显示加载状态
+            const submitButton = document.querySelector('.submit-button');
+            const originalButtonText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+            
+            // 使用fetch API示例
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 如有需要，添加认证头
+                    // 'Authorization': 'Bearer YOUR_API_KEY'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                alert('Registration successful!');
+                document.getElementById('registrationForm').reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // 在实际环境中，这里应该有更友好的错误处理
+                alert('Registration failed. Please try again later.');
+            })
+            .finally(() => {
+                // 恢复按钮状态
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            });
+        }
+    </script>
 </html>
